@@ -1,0 +1,57 @@
+﻿cs2:0x60000000
+各模块偏移：
+    SYSTEM  :0X60000000~0X60001FF
+    UART0   :0X60000200~0X60003FF
+    UART1   :0X60000400~0X60005FF
+    UART2   :0X60000600~0X60007FF
+    UART3   :0X60000800~0X60009FF
+    UART4   :0X60000A00~0X6000BFF
+    UART5   :0X60000C00~0X6000DFF
+    
+    CAN0    :0X60001000~0X60011FF
+    CAN1    :0X60001200~0X60013FF
+    CAN2    :0X60001400~0X60015FF
+    CAN3    :0X60001600~0X60017FF
+    CAN4    :0X60001800~0X60019FF
+    CAN5    :0X60001A00~0X6001BFF
+    CAN6    :0X60001C00~0X6001DFF
+    CAN7    :0X60001E00~0X6001FFF
+
+SYSTEM偏移(16bits):
+0x00: Year
+0x01: Month
+0x02: Day
+0x03: Logic Version
+0x04: Debug Version
+0x05: Test Registers
+
+0x08: uart_485_232, 1->485,0->232(default)
+      [0]->uart0
+       .
+      [5]->uart5
+0x09: f_relay_con[7:0]
+0x0A: f_relay_con[15:8]
+0x0B: f_relay_det[7:0]
+0x0C: f_relay_det[15:8]
+0x0D: f_relay_oen[1:0]
+
+0x10: ttl_di[7:0]
+0x11: ttl_di[15:8]
+0x12: ttl_do[7:0]
+0x13: ttl_do[15:8]
+0x14: ttl_dir[1:0]
+0x15: ttl_en, default(0)
+
+0x18: lan8710_nrst, default(0)
+
+0x20:uart interrupt
+0x21:can interrupt
+0x22:uart soft reset
+0x23:can soft reset
+0x24:uart interrupt enable
+0x25:uart interrupt mask[5:0]   
+0x26:can interrupt enable
+0x27:can interrupt mask[7:0]
+
+
+

@@ -1,0 +1,11 @@
+#--  Synopsys, Inc.
+#--  Version J-2015.03-SP1
+#--  Project file F:\fpga_prj\control_board\syn\control_board.prd
+#
+### Watch Implementation type ###
+#
+watch_impl -all
+#
+### Watch Implementation properties ###
+#
+watch_prop -clear

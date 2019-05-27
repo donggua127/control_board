@@ -1,0 +1,106 @@
+#--  Synopsys, Inc.
+#--  Version J-2015.03-SP1
+#--  Project file F:\fpga_prj\control_board\syn\control_board.prj
+#--  Written on Sun Apr 28 14:09:27 2019
+
+
+#project files
+add_file -verilog "../src/can/can_acf.v"
+add_file -verilog "../src/can/can_bsp.v"
+add_file -verilog "../src/can/can_btl.v"
+add_file -verilog "../src/can/can_crc.v"
+add_file -verilog "../src/can/can_defines.v"
+add_file -verilog "../src/can/can_fifo.v"
+add_file -verilog "../src/can/can_ibo.v"
+add_file -verilog "../src/can/can_register.v"
+add_file -verilog "../src/can/can_register_asyn.v"
+add_file -verilog "../src/can/can_register_asyn_syn.v"
+add_file -verilog "../src/can/can_register_syn.v"
+add_file -verilog "../src/can/can_registers.v"
+add_file -verilog "../src/can/can_top.v"
+add_file -verilog "../src/spi/ad7321_top.v"
+add_file -verilog "../src/spi/spi_driver.v"
+add_file -verilog "../src/top/clk_wiz_25m.v"
+add_file -verilog "../src/top/control_board.v"
+add_file -verilog "../src/top/lbs_ctrl.v"
+add_file -verilog "../src/top/led_bling.v"
+add_file -verilog "../src/top/sys_registers.v"
+add_file -verilog "../src/top/timer.v"
+add_file -verilog "../src/uart/raminfr.v"
+add_file -verilog "../src/uart/timescale.v"
+add_file -verilog "../src/uart/uart_debug_if.v"
+add_file -verilog "../src/uart/uart_defines.v"
+add_file -verilog "../src/uart/uart_receiver.v"
+add_file -verilog "../src/uart/uart_regs.v"
+add_file -verilog "../src/uart/uart_rfifo.v"
+add_file -verilog "../src/uart/uart_sync_flops.v"
+add_file -verilog "../src/uart/uart_tfifo.v"
+add_file -verilog "../src/uart/uart_top.v"
+add_file -verilog "../src/uart/uart_transmitter.v"
+add_file -verilog "../src/uart/uart_wb.v"
+add_file -fpga_constraint "control_board.fdc"
+add_file -verilog "../src/top/pwm_ctrl.v"
+
+
+
+#implementation: "rev_1"
+impl -add rev_1 -type fpga
+
+#
+#implementation attributes
+
+set_option -vlog_std v2001
+set_option -num_critical_paths 10
+set_option -num_startend_points 10
+set_option -project_relative_includes 1
+
+#device options
+set_option -technology Spartan6
+set_option -part XC6SLX100
+set_option -package FGG484
+set_option -speed_grade -2
+set_option -part_companion ""
+
+#compilation/mapping options
+set_option -use_fsm_explorer 0
+set_option -top_module "control_board"
+
+# mapper_options
+set_option -frequency 25
+set_option -write_verilog 1
+set_option -write_vhdl 0
+set_option -srs_instrumentation 1
+
+# xilinx_options
+set_option -rw_check_on_ram 1
+
+# Xilinx Spartan3
+set_option -run_prop_extract 1
+set_option -maxfan 10000
+set_option -disable_io_insertion 0
+set_option -pipe 1
+set_option -retiming 0
+set_option -update_models_cp 0
+set_option -fix_gated_and_generated_clocks 1
+set_option -no_sequential_opt 0
+
+# Xilinx Spartan6
+set_option -enable_prepacking 1
+
+# sequential_optimization_options
+set_option -symbolic_fsm_compiler 1
+
+# Compiler Options
+set_option -compiler_compatible 0
+set_option -resource_sharing 0
+set_option -multi_file_compilation_unit 1
+
+# Compiler Options
+set_option -auto_infer_blackbox 0
+
+#automatic place and route (vendor) options
+set_option -write_apr_constraint 1
+
+#set result format/file last
+project -result_file "rev_1/control_board.edf"
+impl -active "rev_1"
