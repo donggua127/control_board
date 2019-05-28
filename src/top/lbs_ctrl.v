@@ -17,7 +17,7 @@
 // =================================================================================/
 `timescale 1 ns / 1 ns
 module lbs_ctrl #(
-parameter                           UART_NUMS = 6,
+parameter                           UART_NUMS = 11,
 parameter                           CAN_NUMS = 8,
 parameter                           U_DLY = 1
 )
@@ -120,13 +120,18 @@ assign can_lbs_re = re;
 assign re = (cs_n_dly[1] == 1'b0 && oe_n_dly[2:1] == 2'b10) ? 1'b1 : 1'b0;
 
 assign cib_lbs_cs_n     = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h0) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[0] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h1) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[1] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h2) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[2] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h3) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[3] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h4) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[4] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h5) ? 1'b0 : 1'b1;
-assign uart_lbs_cs_n[5] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h6) ? 1'b0 : 1'b1;
-// 4'h7 Reserve
+assign uart_lbs_cs_n[0] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h10) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[1] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h11) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[2] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h12) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[3] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h13) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[4] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h14) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[5] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h15) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[6] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h16) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[7] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h17) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[8] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h18) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[9] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h19) ? 1'b0 : 1'b1;
+assign uart_lbs_cs_n[10] = (cs_n_dly[1] == 1'b0 && addr_1dly[11:4] == 8'h1A) ? 1'b0 : 1'b1;
+// 4'h2~4'h7 Reserve
 assign can_lbs_cs_n[0]  = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h8) ? 1'b0 : 1'b1;
 assign can_lbs_cs_n[1]  = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'h9) ? 1'b0 : 1'b1;
 assign can_lbs_cs_n[2]  = (cs_n_dly[1] == 1'b0 && addr_1dly[11:8] == 4'hA) ? 1'b0 : 1'b1;
@@ -140,12 +145,23 @@ always @(*)
 begin
     case(lbs_addr[11:8])
         4'h0:lbs_dout = cib_lbs_dout;
-        4'h1:lbs_dout = uart_lbs_dout[0*8+:8];
-        4'h2:lbs_dout = uart_lbs_dout[1*8+:8];
-        4'h3:lbs_dout = uart_lbs_dout[2*8+:8];
-        4'h4:lbs_dout = uart_lbs_dout[3*8+:8];
-        4'h5:lbs_dout = uart_lbs_dout[4*8+:8];
-        4'h6:lbs_dout = uart_lbs_dout[5*8+:8];
+        4'h1:
+            begin
+                case(lbs_addr[7:4])
+                    4'h0:lbs_dout = uart_lbs_dout[0*8+:8];
+                    4'h1:lbs_dout = uart_lbs_dout[1*8+:8];
+                    4'h2:lbs_dout = uart_lbs_dout[2*8+:8];
+                    4'h3:lbs_dout = uart_lbs_dout[3*8+:8];
+                    4'h4:lbs_dout = uart_lbs_dout[4*8+:8];
+                    4'h5:lbs_dout = uart_lbs_dout[5*8+:8];
+                    4'h6:lbs_dout = uart_lbs_dout[6*8+:8];
+                    4'h7:lbs_dout = uart_lbs_dout[7*8+:8];
+                    4'h8:lbs_dout = uart_lbs_dout[8*8+:8];
+                    4'h9:lbs_dout = uart_lbs_dout[9*8+:8];
+                    4'hA:lbs_dout = uart_lbs_dout[10*8+:8];
+                    default:lbs_dout = 8'd0;
+                endcase
+            end
 // 4'h7 Reserve
         4'h8:lbs_dout = can_lbs_dout[0*8+:8];
         4'h9:lbs_dout = can_lbs_dout[1*8+:8];

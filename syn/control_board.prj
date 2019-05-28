@@ -1,8 +1,6 @@
 #--  Synopsys, Inc.
 #--  Version J-2015.03-SP1
 #--  Project file F:\fpga_prj\control_board\syn\control_board.prj
-#--  Written on Sun Apr 28 14:09:27 2019
-
 
 #project files
 add_file -verilog "../src/can/can_acf.v"
@@ -40,6 +38,7 @@ add_file -verilog "../src/uart/uart_transmitter.v"
 add_file -verilog "../src/uart/uart_wb.v"
 add_file -fpga_constraint "control_board.fdc"
 add_file -verilog "../src/top/pwm_ctrl.v"
+add_file -verilog "../src/top/ad7606.v"
 
 
 

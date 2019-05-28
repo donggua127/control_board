@@ -23,6 +23,7 @@ input                               rst_n,
 input           [31:0]              ftw,
 input           [31:0]              duty,
 input                               load,
+input                               en,
 output  reg                         pwm
 );
 // Parameter Define
@@ -68,7 +69,9 @@ begin
             else
                 cnt <= #U_DLY 32'd0;
 
-            if(cnt < duty_r)
+            if(en == 1'b0)
+                pwm <= #U_DLY 1'b0;
+            else if(cnt < duty_r)
                 pwm <= #U_DLY 1'b1;
             else
                 pwm <= #U_DLY 1'b0;
