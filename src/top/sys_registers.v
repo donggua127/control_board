@@ -88,6 +88,13 @@
 `define REG_05E {ad_chn7_dat[7:0]}
 `define REG_05F {ad_chn7_dat_high}
 
+`define REG_060 {signal_type}
+`define REG_061 {signal_fms[0*8+:8]}
+`define REG_062 {signal_fms[1*8+:8]}
+`define REG_063 {signal_fms[2*8+:8]}
+`define REG_064 {signal_fms[3*8+:8]}
+`define REG_065 {signal_int_status}
+
 module sys_registers#(
 parameter                           UART_NUMS = 11,
 parameter                           UART_232_NUMS = 6,
@@ -137,7 +144,10 @@ input           [15:0]              ad_chn3_dat,
 input           [15:0]              ad_chn4_dat,
 input           [15:0]              ad_chn5_dat,
 input           [15:0]              ad_chn6_dat,
-input           [15:0]              ad_chn7_dat
+input           [15:0]              ad_chn7_dat,
+output  reg     [7:0]               signal_type,
+output  reg     [31:0]              signal_fms,
+input           [3:0]               signal_into
 );
 // Parameter Define
 localparam                          DEF_RS485 = 8'b0000_0000;
@@ -168,6 +178,7 @@ reg     [7:0]                       ad_chn6_dat_high;
 reg     [7:0]                       ad_chn7_dat_high;
 reg     [7:0]                       lvttl_i_0dly;
 reg     [7:0]                       lvttl_i_1dly;
+reg     [3:0]                       signal_int_status;
 
 
 // Wire Define
@@ -220,6 +231,12 @@ begin
             `REG_045 <= 8'h00;
             `REG_046 <= 8'h00;
             `REG_047 <= 8'h00;
+
+            `REG_060 <= 8'b01010101;
+            `REG_061 <= 8'd2;
+            `REG_062 <= 8'd2;
+            `REG_063 <= 8'd2;
+            `REG_064 <= 8'd2;
         end
     else
         begin
@@ -258,6 +275,11 @@ begin
                         8'h45:`REG_045 <= #U_DLY lbs_din;
                         8'h46:`REG_046 <= #U_DLY lbs_din;
                         8'h47:`REG_047 <= #U_DLY lbs_din;
+                        8'h60:`REG_060 <= #U_DLY lbs_din;
+                        8'h61:`REG_061 <= #U_DLY lbs_din;
+                        8'h62:`REG_062 <= #U_DLY lbs_din;
+                        8'h63:`REG_063 <= #U_DLY lbs_din;
+                        8'h64:`REG_064 <= #U_DLY lbs_din;
                         default:;
                     endcase
                 end
@@ -330,6 +352,12 @@ begin
                 8'h5D:lbs_dout <= #U_DLY `REG_05D;
                 8'h5E:lbs_dout <= #U_DLY `REG_05E;
                 8'h5F:lbs_dout <= #U_DLY `REG_05F;
+                8'h60:lbs_dout <= #U_DLY `REG_060;
+                8'h61:lbs_dout <= #U_DLY `REG_061;
+                8'h62:lbs_dout <= #U_DLY `REG_062;
+                8'h63:lbs_dout <= #U_DLY `REG_063;
+                8'h64:lbs_dout <= #U_DLY `REG_064;
+                8'h65:lbs_dout <= #U_DLY `REG_065;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
@@ -340,7 +368,26 @@ assign int_o[1] = can_int_enb & (|((~can_int) & can_int_mask));  //High Level
 assign int_o[2] = uart_485_int_enb & (|(uart_485_int & uart_485_int_mask));  //High Level
 assign int_o[3] = uart_gps_int_enb & (|(uart_gps_int & uart_gps_int_mask));  //High Level
 assign int_o[4] = gps_pps;
-assign int_o[7:5] = 3'b000;
+assign int_o[5] = |signal_int_status;
+assign int_o[7:6] = 3'b000;
+
+integer i;
+always @ (posedge clk or negedge rst_n )
+begin
+    if (rst_n == 1'b0)
+        signal_int_status <= 4'b0000;
+    else
+        begin
+            for(i=0;i<4;i=i+1)
+                begin
+                    if(signal_into[i] == 1'b1)
+                        signal_int_status[i] <= #U_DLY 1'b1;
+                    else if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
+                        signal_int_status[i] <= #U_DLY 1'b0;
+                    else;
+                end
+        end
+end
 
 always @ (posedge clk)
 begin

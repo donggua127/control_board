@@ -39,6 +39,7 @@ add_file -verilog "../src/uart/uart_wb.v"
 add_file -fpga_constraint "control_board.fdc"
 add_file -verilog "../src/top/pwm_ctrl.v"
 add_file -verilog "../src/top/ad7606.v"
+add_file -verilog "../src/top/signal_check.v"
 
 
 

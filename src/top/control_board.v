@@ -124,6 +124,10 @@ wire    [15:0]                      ad_chn7_dat;
 wire                                pwm_en;
 wire    [UART_NUMS-1:0]             uart_rx;
 wire    [UART_NUMS-1:0]             uart_tx;
+wire                                ms_pulse;
+wire    [7:0]                       signal_type;
+wire    [31:0]                      signal_fms;
+wire    [3:0]                       signal_into;
 
 clk_wiz_25m
 u_clk_wiz_25m
@@ -280,7 +284,10 @@ u_sys_registers(
     .ad_chn4_dat                (ad_chn4_dat                ),
     .ad_chn5_dat                (ad_chn5_dat                ),
     .ad_chn6_dat                (ad_chn6_dat                ),
-    .ad_chn7_dat                (ad_chn7_dat                )
+    .ad_chn7_dat                (ad_chn7_dat                ),
+    .signal_type                (signal_type                ),
+    .signal_fms                 (signal_fms                 ),
+    .signal_into                (signal_into                )
 );
 
 
@@ -290,7 +297,9 @@ timer#(
 u_timer(
     .clk                        (clk_80m                   ),
     .rst_n                      (sys_rst_n                 ),
-    .second_tick                (second_tick                )
+    .ms_pulse                   (ms_pulse                   ),
+    .second_tick                (/*not used*/               ),
+    .fpga_runs                  (fpga_run_s                 )
 );
 
 assign fpga_run_s = second_tick;
@@ -338,5 +347,25 @@ u_ad7606(
 );
 
 assign ad7606_ref_select = 1'b1; //内部基准
+
+
+genvar k;
+generate
+for(k = 0;k < 4;k = k+1)
+begin
+signal_check #(
+    .U_DLY                      (U_DLY                      )
+)
+u_signal_check(
+    .clk                        (clk_80m                    ),
+    .rst_n                      (rst_n                      ),
+    .si                         (lvttl_i[4+k]               ),
+    .type                       (signal_type[2*k+:2]        ),
+    .ms_pulse                   (ms_pulse                   ),
+    .fms                        (signal_fms[8*k+:8]         ),
+    .into                       (signal_into[k]             )
+);
+end
+endgenerate
 
 endmodule
