@@ -94,6 +94,8 @@
 `define REG_063 {signal_fms[2*8+:8]}
 `define REG_064 {signal_fms[3*8+:8]}
 `define REG_065 {signal_int_status}
+`define REG_066 {fill[7:1],signal_int_enb}
+`define REG_067 {7'd0,signal_trigger}
 
 module sys_registers#(
 parameter                           UART_NUMS = 11,
@@ -179,6 +181,12 @@ reg     [7:0]                       ad_chn7_dat_high;
 reg     [7:0]                       lvttl_i_0dly;
 reg     [7:0]                       lvttl_i_1dly;
 reg     [3:0]                       signal_int_status;
+reg     [18:0]                      signal_int_cnt;
+reg                                 signal_int_i;
+reg                                 signal_trigger;
+reg     [8:0]                       signal_tcnt;
+reg                                 signal_int_enb;
+reg                                 signal_int;
 
 
 // Wire Define
@@ -237,6 +245,7 @@ begin
             `REG_062 <= 8'd2;
             `REG_063 <= 8'd2;
             `REG_064 <= 8'd2;
+            `REG_066 <= 8'd0;
         end
     else
         begin
@@ -280,6 +289,7 @@ begin
                         8'h62:`REG_062 <= #U_DLY lbs_din;
                         8'h63:`REG_063 <= #U_DLY lbs_din;
                         8'h64:`REG_064 <= #U_DLY lbs_din;
+                        8'h66:`REG_066 <= #U_DLY lbs_din;
                         default:;
                     endcase
                 end
@@ -358,6 +368,8 @@ begin
                 8'h63:lbs_dout <= #U_DLY `REG_063;
                 8'h64:lbs_dout <= #U_DLY `REG_064;
                 8'h65:lbs_dout <= #U_DLY `REG_065;
+                8'h66:lbs_dout <= #U_DLY `REG_066;
+                8'h67:lbs_dout <= #U_DLY `REG_067;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
@@ -368,7 +380,7 @@ assign int_o[1] = can_int_enb & (|((~can_int) & can_int_mask));  //High Level
 assign int_o[2] = uart_485_int_enb & (|(uart_485_int & uart_485_int_mask));  //High Level
 assign int_o[3] = uart_gps_int_enb & (|(uart_gps_int & uart_gps_int_mask));  //High Level
 assign int_o[4] = gps_pps;
-assign int_o[5] = |signal_int_status;
+assign int_o[5] = signal_int;
 assign int_o[7:6] = 3'b000;
 
 integer i;
@@ -386,6 +398,53 @@ begin
                         signal_int_status[i] <= #U_DLY 1'b0;
                     else;
                 end
+        end
+end
+
+always @ (posedge clk or negedge rst_n )
+begin
+    if (rst_n == 1'b0)
+        begin
+            signal_int_cnt <= 19'd0;
+            signal_int_i <= 1'b0;
+        end
+    else
+        begin
+           if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
+               signal_int_cnt <= #U_DLY 16'd0;
+           else if(signal_int_cnt < 19'd400000)  //5ms
+               signal_int_cnt <= #U_DLY signal_int_cnt + 19'd1;
+           else;
+
+           if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
+               signal_int_i <= #U_DLY 1'b0;
+           else if(signal_int_cnt >= 19'd400000 && signal_int_status != 4'b0000)
+               signal_int_i <= #U_DLY 1'b1;
+           else;
+
+           signal_int <= #U_DLY signal_int_i & signal_int_enb;
+        end
+end
+
+always @ (posedge clk or negedge rst_n )
+begin
+    if (rst_n == 1'b0)
+        begin
+            signal_trigger <= 1'b0;
+            signal_tcnt <= 9'd0;
+        end
+    else
+        begin
+            if(signal_int_i == 1'b0)
+                signal_tcnt <= #U_DLY 9'd0;
+            else if(signal_tcnt < 9'd500)
+                signal_tcnt <= #U_DLY signal_tcnt + 9'd1;
+            else;
+
+            if(signal_tcnt >= 9'd500)
+                signal_trigger <= #U_DLY 1'b1;
+            else
+                signal_trigger <= #U_DLY 1'b0;
         end
 end
 
