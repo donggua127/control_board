@@ -97,6 +97,9 @@
 `define REG_066 {fill[7:1],signal_int_enb}
 `define REG_067 {7'd0,signal_trigger}
 
+`define REG_068 {pco[7:0]}
+`define REG_069 {pco_high_latch}
+
 module sys_registers#(
 parameter                           UART_NUMS = 11,
 parameter                           UART_232_NUMS = 6,
@@ -149,7 +152,8 @@ input           [15:0]              ad_chn6_dat,
 input           [15:0]              ad_chn7_dat,
 output  reg     [7:0]               signal_type,
 output  reg     [31:0]              signal_fms,
-input           [3:0]               signal_into
+input           [3:0]               signal_into,
+input           [15:0]              pco
 );
 // Parameter Define
 localparam                          DEF_RS485 = 8'b0000_0000;
@@ -187,6 +191,7 @@ reg                                 signal_trigger;
 reg     [8:0]                       signal_tcnt;
 reg                                 signal_int_enb;
 reg                                 signal_int;
+reg     [7:0]                       pco_high_latch;
 
 
 // Wire Define
@@ -370,6 +375,8 @@ begin
                 8'h65:lbs_dout <= #U_DLY `REG_065;
                 8'h66:lbs_dout <= #U_DLY `REG_066;
                 8'h67:lbs_dout <= #U_DLY `REG_067;
+                8'h68:lbs_dout <= #U_DLY `REG_068;
+                8'h69:lbs_dout <= #U_DLY `REG_069;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
@@ -468,6 +475,7 @@ begin
             ad_chn5_dat_high <= 8'd0;
             ad_chn6_dat_high <= 8'd0;
             ad_chn7_dat_high <= 8'd0;
+            pco_high_latch <= 8'd0;
         end
     else
         begin
@@ -504,6 +512,10 @@ begin
 
             if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h52)
                 ad_chn7_dat_high <= #U_DLY ad_chn7_dat[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h68)
+                pco_high_latch <= #U_DLY pco[15:8];
             else;
         end
 end

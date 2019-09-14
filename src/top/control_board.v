@@ -128,6 +128,7 @@ wire                                ms_pulse;
 wire    [7:0]                       signal_type;
 wire    [31:0]                      signal_fms;
 wire    [3:0]                       signal_into;
+wire    [15:0]                      pco;
 
 clk_wiz_25m
 u_clk_wiz_25m
@@ -287,7 +288,8 @@ u_sys_registers(
     .ad_chn7_dat                (ad_chn7_dat                ),
     .signal_type                (signal_type                ),
     .signal_fms                 (signal_fms                 ),
-    .signal_into                (signal_into                )
+    .signal_into                (signal_into                ),
+    .pco                        (pco                        )
 );
 
 
@@ -351,7 +353,7 @@ assign ad7606_ref_select = 1'b1; //内部基准
 
 genvar k;
 generate
-for(k = 0;k < 4;k = k+1)
+for(k = 0;k < 3;k = k+1)
 begin
 signal_check #(
     .U_DLY                      (U_DLY                      )
@@ -359,7 +361,7 @@ signal_check #(
 u_signal_check(
     .clk                        (clk_80m                    ),
     .rst_n                      (rst_n                      ),
-    .si                         (lvttl_i[4+k]               ),
+    .si                         (lvttl_i[2+k]               ),
     .type                       (signal_type[2*k+:2]        ),
     .ms_pulse                   (ms_pulse                   ),
     .fms                        (signal_fms[8*k+:8]         ),
@@ -367,5 +369,22 @@ u_signal_check(
 );
 end
 endgenerate
+
+assign signal_into[3] = 0;
+assign ai = lvttl_i[5];
+assign bi = lvttl_i[6];
+assign zi = lvttl_i[7];
+
+coder #(
+    .U_DLY                      (U_DLY                      )
+)
+u_coder(
+    .clk                        (clk_80m                    ),
+    .rst_n                      (rst_n                      ),
+    .ai                         (ai                         ),
+    .bi                         (bi                         ),
+    .zi                         (zi                         ),
+    .pco                        (pco                        )
+);
 
 endmodule
