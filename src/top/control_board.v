@@ -129,6 +129,9 @@ wire    [7:0]                       signal_type;
 wire    [31:0]                      signal_fms;
 wire    [3:0]                       signal_into;
 wire    [15:0]                      pco;
+wire    [15:0]                      sco;
+wire    [3:0]                       sfo;
+wire    [63:0]                      swidth;
 
 clk_wiz_25m
 u_clk_wiz_25m
@@ -289,7 +292,9 @@ u_sys_registers(
     .signal_type                (signal_type                ),
     .signal_fms                 (signal_fms                 ),
     .signal_into                (signal_into                ),
-    .pco                        (pco                        )
+    .pco                        (pco                        ),
+    .sco                        (sco                        ),
+    .swidth                     (swidth                     )
 );
 
 
@@ -365,6 +370,7 @@ u_signal_check(
     .type                       (signal_type[2*k+:2]        ),
     .ms_pulse                   (ms_pulse                   ),
     .fms                        (signal_fms[8*k+:8]         ),
+    .sfo                        (sfo[k]                     ),
     .into                       (signal_into[k]             )
 );
 end
@@ -384,7 +390,10 @@ u_coder(
     .ai                         (ai                         ),
     .bi                         (bi                         ),
     .zi                         (zi                         ),
-    .pco                        (pco                        )
+    .si                         (sfo                        ),
+    .pco                        (pco                        ),
+    .swidth                     (swidth                     ),
+    .sco                        (sco                        )
 );
 
 endmodule

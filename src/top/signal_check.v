@@ -24,6 +24,7 @@ input                               si,
 input           [1:0]               type,
 input                               ms_pulse,
 input           [7:0]               fms,
+output                              sfo,
 output  reg                         into
 );
 // Parameter Define
@@ -73,6 +74,8 @@ begin
             si_filter_dly <= #U_DLY si_filter;
         end
 end
+
+assign sfo = si_filter;
 
 always @ (posedge clk or negedge rst_n )
 begin

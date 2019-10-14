@@ -22,7 +22,10 @@ input                               rst_n,
 input                               ai,
 input                               bi,
 input                               zi,
-output          [15:0]              pco
+input           [3:0]               si,
+output          [15:0]              pco,
+output  reg     [15:0]              sco,
+output  reg     [63:0]              swidth
 );
 // Parameter Define
 localparam                          TYPE_NONE = 2'b00;
@@ -41,6 +44,11 @@ reg     [1:0]                       ztype;
 reg                                 ai_reg;
 reg                                 bi_reg;
 reg                                 pulse_push;
+reg     [15:0]                      t50ms_cnt;
+reg                                 t50ms_flag;
+reg     [15:0]                      speed_reg;
+reg     [63:0]                      sstart;
+reg     [3:0]                       si_dly;
 
 // Wire Define
 wire                                ai_rise;
@@ -177,5 +185,64 @@ end
 
 assign pco = pulse_cnt;
 
+always @ (posedge clk or negedge rst_n )
+begin
+    if (rst_n == 1'b0)
+        begin
+            t50ms_cnt <= 16'd0;
+            t50ms_flag <= 1'b0;
+            speed_reg <= 16'd0;
+            sco <= 16'd0;
+        end
+    else
+        begin
+            if(clk_en == 1'b1)
+                begin
+                    if(t50ms_cnt < 16'd49999)
+                        t50ms_cnt <= #U_DLY t50ms_cnt + 16'd1;
+                    else
+                        t50ms_cnt <= #U_DLY 16'd0;
+                end
+            else;
+
+            if(clk_en == 1'b1 && t50ms_cnt == 16'd49999)
+                t50ms_flag <= #U_DLY 1'b1;
+            else
+                t50ms_flag <= #U_DLY 1'b0;
+
+            if(t50ms_flag == 1'b1)
+                speed_reg <= #U_DLY pulse_cnt;
+            else;
+
+            if(t50ms_flag == 1'b1)
+                sco <= #U_DLY pulse_cnt - speed_reg;
+            else;
+        end
+end
+
+integer i;
+always @ (posedge clk or negedge rst_n )
+begin
+    if (rst_n == 1'b0)
+        begin
+            sstart <= 64'd0;
+            swidth <= 64'd0;
+            si_dly <= 4'd0;
+        end
+    else
+        begin
+            si_dly <= #U_DLY si;
+            for(i=0;i<4;i=i+1)
+                begin
+                    if({si_dly[i],si[i]} == 2'b01)  //rise edge
+                        sstart[i*16+:16] <= #U_DLY pulse_cnt;
+                    else;
+
+                    if({si_dly[i],si[i]} == 2'b10)
+                        swidth[i*16+:16] <= #U_DLY pulse_cnt - sstart[i*16+:16];
+                    else;
+                end
+        end
+end
 endmodule
 

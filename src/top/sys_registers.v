@@ -99,6 +99,21 @@
 
 `define REG_068 {pco[7:0]}
 `define REG_069 {pco_high_latch}
+`define REG_06A {dco[7:0]}
+`define REG_06B {dco_high_latch}
+`define REG_06C {sco[7:0]}
+`define REG_06D {sco_high_latch}
+
+`define REG_070 {swidth[0*16+:8]}
+`define REG_071 {s0_high_latch}
+`define REG_072 {swidth[1*16+:8]}
+`define REG_073 {s1_high_latch}
+`define REG_074 {swidth[2*16+:8]}
+`define REG_075 {s2_high_latch}
+`define REG_076 {swidth[3*16+:8]}
+`define REG_077 {s3_high_latch}
+
+
 
 module sys_registers#(
 parameter                           UART_NUMS = 11,
@@ -153,7 +168,9 @@ input           [15:0]              ad_chn7_dat,
 output  reg     [7:0]               signal_type,
 output  reg     [31:0]              signal_fms,
 input           [3:0]               signal_into,
-input           [15:0]              pco
+input           [15:0]              pco,
+input           [63:0]              swidth,
+input           [15:0]              sco
 );
 // Parameter Define
 localparam                          DEF_RS485 = 8'b0000_0000;
@@ -192,6 +209,14 @@ reg     [8:0]                       signal_tcnt;
 reg                                 signal_int_enb;
 reg                                 signal_int;
 reg     [7:0]                       pco_high_latch;
+reg     [15:0]                      dco;
+reg     [7:0]                       dco_high_latch;
+reg     [7:0]                       sco_high_latch;
+reg     [15:0]                      pco_pre;
+reg     [7:0]                       s0_high_latch;
+reg     [7:0]                       s1_high_latch;
+reg     [7:0]                       s2_high_latch;
+reg     [7:0]                       s3_high_latch;
 
 
 // Wire Define
@@ -377,6 +402,18 @@ begin
                 8'h67:lbs_dout <= #U_DLY `REG_067;
                 8'h68:lbs_dout <= #U_DLY `REG_068;
                 8'h69:lbs_dout <= #U_DLY `REG_069;
+                8'h6A:lbs_dout <= #U_DLY `REG_06A;
+                8'h6B:lbs_dout <= #U_DLY `REG_06B;
+                8'h6C:lbs_dout <= #U_DLY `REG_06C;
+                8'h6D:lbs_dout <= #U_DLY `REG_06D;
+                8'h70:lbs_dout <= #U_DLY `REG_070;
+                8'h71:lbs_dout <= #U_DLY `REG_071;
+                8'h72:lbs_dout <= #U_DLY `REG_072;
+                8'h73:lbs_dout <= #U_DLY `REG_073;
+                8'h74:lbs_dout <= #U_DLY `REG_074;
+                8'h75:lbs_dout <= #U_DLY `REG_075;
+                8'h76:lbs_dout <= #U_DLY `REG_076;
+                8'h77:lbs_dout <= #U_DLY `REG_077;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
@@ -476,6 +513,10 @@ begin
             ad_chn6_dat_high <= 8'd0;
             ad_chn7_dat_high <= 8'd0;
             pco_high_latch <= 8'd0;
+            dco_high_latch <= 8'd0;
+            sco_high_latch <= 8'd0;
+            dco <= 16'd0;
+            pco_pre <= 16'd0;
         end
     else
         begin
@@ -516,6 +557,33 @@ begin
 
             if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h68)
                 pco_high_latch <= #U_DLY pco[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6A)
+                pco_pre <= #U_DLY pco;
+            else;
+
+            dco <= #U_DLY pco - pco_pre;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6A)
+                dco_high_latch <= #U_DLY dco[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6C)
+                sco_high_latch <= #U_DLY sco[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h70)
+                s0_high_latch <= #U_DLY swidth[(0*16+8)+:8];
+            else;
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h72)
+                s1_high_latch <= #U_DLY swidth[(1*16+8)+:8];
+            else;
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h74)
+                s2_high_latch <= #U_DLY swidth[(2*16+8)+:8];
+            else;
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h76)
+                s3_high_latch <= #U_DLY swidth[(3*16+8)+:8];
             else;
         end
 end
