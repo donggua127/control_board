@@ -113,6 +113,12 @@
 `define REG_076 {swidth[3*16+:8]}
 `define REG_077 {s3_high_latch}
 
+`define REG_078 {code1_pco[7:0]}
+`define REG_079 {code1_pco_high_latch}
+`define REG_07A {code1_dco[7:0]}
+`define REG_07B {code1_dco_high_latch}
+`define REG_07C {code1_sco[7:0]}
+`define REG_07D {code1_sco_high_latch}
 
 
 module sys_registers#(
@@ -170,7 +176,9 @@ output  reg     [31:0]              signal_fms,
 input           [3:0]               signal_into,
 input           [15:0]              pco,
 input           [63:0]              swidth,
-input           [15:0]              sco
+input           [15:0]              sco,
+input           [15:0]              code1_pco,
+input           [15:0]              code1_sco
 );
 // Parameter Define
 localparam                          DEF_RS485 = 8'b0000_0000;
@@ -217,6 +225,11 @@ reg     [7:0]                       s0_high_latch;
 reg     [7:0]                       s1_high_latch;
 reg     [7:0]                       s2_high_latch;
 reg     [7:0]                       s3_high_latch;
+reg     [7:0]                       code1_pco_high_latch;
+reg     [7:0]                       code1_dco_high_latch;
+reg     [7:0]                       code1_sco_high_latch;
+reg     [15:0]                      code1_dco;
+reg     [15:0]                      code1_pco_pre;
 
 
 // Wire Define
@@ -414,6 +427,12 @@ begin
                 8'h75:lbs_dout <= #U_DLY `REG_075;
                 8'h76:lbs_dout <= #U_DLY `REG_076;
                 8'h77:lbs_dout <= #U_DLY `REG_077;
+                8'h78:lbs_dout <= #U_DLY `REG_078;
+                8'h79:lbs_dout <= #U_DLY `REG_079;
+                8'h7A:lbs_dout <= #U_DLY `REG_07A;
+                8'h7B:lbs_dout <= #U_DLY `REG_07B;
+                8'h7C:lbs_dout <= #U_DLY `REG_07C;
+                8'h7D:lbs_dout <= #U_DLY `REG_07D;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
@@ -517,6 +536,12 @@ begin
             sco_high_latch <= 8'd0;
             dco <= 16'd0;
             pco_pre <= 16'd0;
+
+            code1_pco_high_latch <= 8'd0;
+            code1_dco_high_latch <= 8'd0;
+            code1_sco_high_latch <= 8'd0;
+            code1_dco <= 16'd0;
+            code1_pco_pre <= 16'd0;
         end
     else
         begin
@@ -585,6 +610,25 @@ begin
             if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h76)
                 s3_high_latch <= #U_DLY swidth[(3*16+8)+:8];
             else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h78)
+                code1_pco_high_latch <= #U_DLY code1_pco[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7A)
+                code1_pco_pre <= #U_DLY code1_pco;
+            else;
+
+            code1_dco <= #U_DLY code1_pco - code1_pco_pre;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7A)
+                code1_dco_high_latch <= #U_DLY code1_dco[15:8];
+            else;
+
+            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7C)
+                code1_sco_high_latch <= #U_DLY code1_sco[15:8];
+            else;
+
         end
 end
 endmodule

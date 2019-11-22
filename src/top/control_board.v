@@ -132,6 +132,11 @@ wire    [15:0]                      pco;
 wire    [15:0]                      sco;
 wire    [3:0]                       sfo;
 wire    [63:0]                      swidth;
+wire                                code1_ai;
+wire                                code1_bi;
+wire                                code1_zi;
+wire    [15:0]                      code1_pco;
+wire    [15:0]                      code1_sco;
 
 clk_wiz_25m
 u_clk_wiz_25m
@@ -294,7 +299,9 @@ u_sys_registers(
     .signal_into                (signal_into                ),
     .pco                        (pco                        ),
     .sco                        (sco                        ),
-    .swidth                     (swidth                     )
+    .swidth                     (swidth                     ),
+    .code1_pco                  (code1_pco                  ),
+    .code1_sco                  (code1_sco                  )
 );
 
 
@@ -366,7 +373,7 @@ signal_check #(
 u_signal_check(
     .clk                        (clk_80m                    ),
     .rst_n                      (rst_n                      ),
-    .si                         (lvttl_i[2+k]               ),
+    .si                         (1'b0                       ),  /*去掉光电对管信号检测*/
     .type                       (signal_type[2*k+:2]        ),
     .ms_pulse                   (ms_pulse                   ),
     .fms                        (signal_fms[8*k+:8]         ),
@@ -396,4 +403,22 @@ u_coder(
     .sco                        (sco                        )
 );
 
+assign code1_ai = lvttl_i[2];
+assign code1_bi = lvttl_i[3];
+assign code1_zi = lvttl_i[4];
+
+coder #(
+    .U_DLY                      (U_DLY                      )
+)
+u_coder1(
+    .clk                        (clk_80m                    ),
+    .rst_n                      (rst_n                      ),
+    .ai                         (code1_ai                   ),
+    .bi                         (code1_bi                   ),
+    .zi                         (code1_zi                   ),
+    .si                         (4'd0                       ),
+    .pco                        (code1_pco                  ),
+    .swidth                     (                           ),
+    .sco                        (code1_sco                  )
+);
 endmodule
