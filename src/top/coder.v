@@ -49,10 +49,13 @@ reg                                 t50ms_flag;
 reg     [15:0]                      speed_reg;
 reg     [63:0]                      sstart;
 reg     [3:0]                       si_dly;
+reg                                 zi_high;
+reg                                 zi_reg;
 
 // Wire Define
 wire                                ai_rise;
 wire                                bi_rise;
+wire                                zi_rise;
 
 
 // Generate (us) clock enable pulse.
@@ -91,6 +94,8 @@ begin
         begin
             ai_reg <= 1'b0;
             bi_reg <= 1'b0;
+            zi_reg <= 1'b0;
+            zi_high <= 1'b0;
         end
     else
         begin
@@ -101,11 +106,27 @@ begin
             if(clk_en == 1'b1)
                 bi_reg <= #U_DLY bi_dly[1];
             else;
+
+            if(clk_en == 1'b1)
+                zi_reg <= #U_DLY zi_dly[1];
+            else;
+
+            if(clk_en == 1'b1)
+                begin
+                    if(zi_rise == 1'b1)
+                        zi_high <= #U_DLY 1'b1;
+                    else if(zi_dly[1] == 1'b0 || (bi_dly[1] == 1'b1 && ai_rise == 1'b1) ||
+                                    (ai_dly[1] == 1'b1 && bi_rise == 1'b1))
+                        zi_high <= #U_DLY 1'b0;
+                    else;
+                end
+            else;
         end
 end
 
 assign ai_rise = ai_dly[1] & (~ai_reg);
 assign bi_rise = bi_dly[1] & (~bi_reg);
+assign zi_rise = zi_dly[1] & (~zi_reg);
 
 always @ (posedge clk or negedge rst_n )
 begin
@@ -120,7 +141,7 @@ begin
         begin
             if(clk_en == 1'b1)
                 begin
-                    if(zi_dly[1] == 1'b1)
+                    if(zi_high   == 1'b1)
                         begin
                             if(bi_dly[1] == 1'b1 && ai_rise == 1'b1)
                                 begin
@@ -158,7 +179,7 @@ begin
 
             if(clk_en == 1'b1)
                 begin
-                    if(zi_dly[1] == 1'b1)
+                    if(zi_high   == 1'b1)
                         begin
                             if(bi_dly[1] == 1'b1 && ai_rise == 1'b1)
                                 ztype <= #U_DLY TYPE_CCW;
@@ -170,7 +191,7 @@ begin
                 end
             else;
 
-            if(clk_en == 1'b1 && zi_dly[1] == 1'b1 &&
+            if(clk_en == 1'b1 && zi_high   == 1'b1 &&
                 ((bi_dly[1] == 1'b1 && ai_rise == 1'b1) || (ai_dly[1] == 1'b1 && bi_rise == 1'b1)))
                 pulse_push <= #U_DLY 1'b1;
             else
