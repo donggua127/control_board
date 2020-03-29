@@ -137,6 +137,23 @@ wire                                code1_bi;
 wire                                code1_zi;
 wire    [15:0]                      code1_pco;
 wire    [15:0]                      code1_sco;
+wire                                brake_heart_pulse;
+wire                                brake_heart_enable;
+wire    [7:0]                       brake_heart_timeout;
+wire    [15:0]                      brake_ratio;
+wire                                brake_bus_on;
+wire                                brake_csn;
+wire                                brake_we;
+wire                                brake_re;
+wire    [7:0]                       brake_addr;
+wire    [7:0]                       brake_din;
+wire    [7:0]                       brake_dout;
+wire                                can_1_csn;
+wire                                can_1_we;
+wire                                can_1_re;
+wire    [7:0]                       can_1_addr;
+wire    [7:0]                       can_1_din;
+wire    [7:0]                       can_1_dout;
 
 clk_wiz_25m
 u_clk_wiz_25m
@@ -188,10 +205,41 @@ assign uart_232_tx = uart_tx[0+:UART_232_NUMS];
 assign uart_485_tx = uart_tx[UART_232_NUMS+:UART_485_NUMS];
 assign gps_txd = uart_tx[UART_NUMS-1];
 
+assign can_1_csn  = brake_bus_on ? brake_csn  : can_lbs_cs_n[1];
+assign can_1_we   = brake_bus_on ? brake_we   : can_lbs_we;
+assign can_1_re   = brake_bus_on ? brake_re   : can_lbs_re;
+assign can_1_addr = brake_bus_on ? brake_addr : can_lbs_addr;
+assign can_1_din  = brake_bus_on ? brake_din  : can_lbs_din;
+assign can_1_dout = can_lbs_dout[8+:8];
+
 genvar j;
 generate
 for(j = 0;j < CAN_NUMS;j = j+1)
 begin
+    if(j == 1)  //BRAKE CAN
+can_top #(
+    .U_DLY                      (U_DLY                      )
+)
+u_can_top(
+    .rst                        (~sys_rst_n | can_soft_rst[j]),
+    .clk                        (clk_80m                    ),
+// Local Bus
+    .lbe_cs_n                   (can_1_csn                  ),
+    .lbe_wr_en                  (can_1_we                   ),
+    .lbe_rd_en                  (can_1_re                   ),
+    .lbe_addr                   (can_1_addr                 ),
+    .lbe_wr_dat                 (can_1_din                  ),
+    .lbe_rd_dat                 (can_lbs_dout[j*8+:8]       ),
+// Interrupt
+    .irq_on                     (can_int[j]                 ),
+// CAN I/O
+    .rx                         (fpga_canr[j]               ),
+    .tx                         (fpga_cand[j]               ),
+// Debug
+    .clk_out                    (/*not used*/               ),
+    .bus_off_on                 (/*not used*/               )
+);
+    else
 can_top #(
     .U_DLY                      (U_DLY                      )
 )
@@ -301,7 +349,11 @@ u_sys_registers(
     .sco                        (sco                        ),
     .swidth                     (swidth                     ),
     .code1_pco                  (code1_pco                  ),
-    .code1_sco                  (code1_sco                  )
+    .code1_sco                  (code1_sco                  ),
+    .brake_heart_pulse          (brake_heart_pulse          ),
+    .brake_ratio                (brake_ratio                ),
+    .brake_heart_timeout        (brake_heart_timeout        ),
+    .brake_heart_enable         (brake_heart_enable         )
 );
 
 
@@ -420,5 +472,26 @@ u_coder1(
     .pco                        (code1_pco                  ),
     .swidth                     (                           ),
     .sco                        (code1_sco                  )
+);
+
+brake_heart #(
+    .U_DLY                      (U_DLY                      )
+)(
+    .clk                        (clk                        ),
+    .rst_n                      (rst_n                      ),
+    .ms_pulse                   (ms_pulse                   ),
+
+    .brake_heart_pulse          (brake_heart_pulse          ),
+    .brake_heart_timeout        (brake_heart_timeout        ),
+    .brake_heart_enable         (brake_heart_enable         ),
+    .brake_ratio                (brake_ratio                ),
+
+    .brake_bus_on               (brake_bus_on               ),
+    .brake_csn                  (brake_csn                  ),
+    .brake_we                   (brake_we                   ),
+    .brake_re                   (brake_re                   ),
+    .brake_addr                 (brake_addr                 ),
+    .brake_din                  (brake_din                  ),
+    .brake_dout                 (brake_dout                 )
 );
 endmodule

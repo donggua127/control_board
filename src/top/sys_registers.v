@@ -41,6 +41,12 @@
 `define REG_014 {fill[7:1],lvttl_en}
 
 `define REG_018 {fill[7:1],lan8710_nrst}
+`define REG_019 {brake_heart}
+`define REG_01A {brake_heart_timeout}
+`define REG_01B {fill[7:1],brake_heart_enable}
+`define REG_01C {brake_ratio[7:0]}
+`define REG_01D {brake_ratio[15:8]}
+
 
 `define REG_020 {2'b00,uart_232_int}
 `define REG_021 {can_int}
@@ -178,7 +184,11 @@ input           [15:0]              pco,
 input           [63:0]              swidth,
 input           [15:0]              sco,
 input           [15:0]              code1_pco,
-input           [15:0]              code1_sco
+input           [15:0]              code1_sco,
+output  reg                         brake_heart_pulse,
+output  reg     [15:0]              brake_ratio,
+output  reg     [7:0]               brake_heart_timeout,
+output  reg                         brake_heart_enable
 );
 // Parameter Define
 localparam                          DEF_RS485 = 8'b0000_0000;
@@ -230,6 +240,7 @@ reg     [7:0]                       code1_dco_high_latch;
 reg     [7:0]                       code1_sco_high_latch;
 reg     [15:0]                      code1_dco;
 reg     [15:0]                      code1_pco_pre;
+reg     [7:0]                       brake_heart;
 
 
 // Wire Define
@@ -258,6 +269,11 @@ begin
             `REG_012 <= 8'h00;
             `REG_014 <= 8'h00;
             `REG_018 <= 8'h00;
+            `REG_019 <= 8'h00;
+            `REG_01A <= 8'h02;      //brake heart timeout (default: 2s)
+            `REG_01B <= 8'h00;      //brake heart enable  (default: DISABLE)
+            `REG_01C <= 8'h00;      //brake heart enable  (default: DISABLE)
+            `REG_01D <= 8'h00;      //brake heart enable  (default: DISABLE)
             `REG_022 <= 8'h00;
             `REG_023 <= 8'h00;
             `REG_024 <= 8'h00;
@@ -305,6 +321,11 @@ begin
                         8'h12:`REG_012 <= #U_DLY lbs_din;
                         8'h14:`REG_014 <= #U_DLY lbs_din;
                         8'h18:`REG_018 <= #U_DLY lbs_din;
+                        8'h19:`REG_019 <= #U_DLY lbs_din;
+                        8'h1A:`REG_01A <= #U_DLY lbs_din;
+                        8'h1B:`REG_01B <= #U_DLY lbs_din;
+                        8'h1C:`REG_01C <= #U_DLY lbs_din;
+                        8'h1D:`REG_01D <= #U_DLY lbs_din;
                         8'h22:`REG_022 <= #U_DLY lbs_din;
                         8'h23:`REG_023 <= #U_DLY lbs_din;
                         8'h24:`REG_024 <= #U_DLY lbs_din;
@@ -363,6 +384,11 @@ begin
                 8'h13:lbs_dout <= #U_DLY `REG_013;
                 8'h14:lbs_dout <= #U_DLY `REG_014;
                 8'h18:lbs_dout <= #U_DLY `REG_018;
+                8'h19:lbs_dout <= #U_DLY `REG_019;
+                8'h1A:lbs_dout <= #U_DLY `REG_01A;
+                8'h1B:lbs_dout <= #U_DLY `REG_01B;
+                8'h1C:lbs_dout <= #U_DLY `REG_01C;
+                8'h1D:lbs_dout <= #U_DLY `REG_01D;
                 8'h20:lbs_dout <= #U_DLY `REG_020;
                 8'h21:lbs_dout <= #U_DLY `REG_021;
                 8'h22:lbs_dout <= #U_DLY `REG_022;
@@ -631,4 +657,19 @@ begin
 
         end
 end
+
+always @(posedge clk or negedge rst_n)
+begin
+    if(rst_n == 1'b0)
+        brake_heart_pulse <= 1'b0;
+    else
+        begin
+            if(lbs_cs_n == 1'b0 && lbs_we == 1'b1 && lbs_addr == 8'h19)
+                brake_heart_pulse <= #U_DLY 1'b1;
+            else
+                brake_heart_pulse <= #U_DLY 1'b0;
+        end
+end
+
+
 endmodule
