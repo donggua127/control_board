@@ -211,6 +211,7 @@ assign can_1_re   = brake_bus_on ? brake_re   : can_lbs_re;
 assign can_1_addr = brake_bus_on ? brake_addr : can_lbs_addr;
 assign can_1_din  = brake_bus_on ? brake_din  : can_lbs_din;
 assign can_1_dout = can_lbs_dout[8+:8];
+assign brake_dout = can_lbs_dout[8+:8];
 
 genvar j;
 generate
@@ -477,7 +478,7 @@ u_coder1(
 brake_heart #(
     .U_DLY                      (U_DLY                      )
 )(
-    .clk                        (clk                        ),
+    .clk                        (clk_80m                    ),
     .rst_n                      (rst_n                      ),
     .ms_pulse                   (ms_pulse                   ),
 

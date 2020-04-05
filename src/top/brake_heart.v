@@ -36,13 +36,19 @@ input           [7:0]               brake_dout,
 output  reg     [7:0]               brake_din
 );
 // Parameter Define
+localparam                          IDLE            = 3'b001;
+localparam                          SEND_HAND_BRAKE = 3'b010;
+localparam                          DELAY_200MS     = 3'b100;
+
+localparam                          DATA_LENGTH     = 6'd3;
+
 
 // Register Define
 reg     [7:0]                       delay_cnt;
 reg                                 delay_end;
 reg     [7:0]                       send_cnt;
 reg                                 send_end;
-reg     [2:0]                       curr_state;
+reg     [2:0]                       curr_state/* synthesis syn_encoding="safe,onehot",syn_preserve = 1 */;
 reg     [2:0]                       next_state;
 reg                                 timeout_trigger;
 reg     [7:0]                       timeout_cnt;
@@ -58,13 +64,13 @@ begin
             second_cnt <= 10'd0;
             second_pulse <= 1'b0;
             timeout_cnt <= 8'd0;
-            timeout_trigger < = 1'b0;
+            timeout_trigger <= 1'b0;
         end
     else
         begin
             if(brake_heart_pulse == 1'b1 || brake_heart_enable == 1'b0)
                 second_cnt <= #U_DLY 10'd0;
-            else if(ms_pusle == 1'b1)
+            else if(ms_pulse == 1'b1)
                 begin
                     if(second_cnt >= 10'd999)
                         second_cnt <= #U_DLY 10'd0;
@@ -125,7 +131,7 @@ begin
             end
         DELAY_200MS:
             begin
-                if(delay_200ms_end == 1'b1)
+                if(delay_end == 1'b1)
                     next_state = IDLE;
                 else
                     next_state = DELAY_200MS;
@@ -219,4 +225,3 @@ begin
 end
 
 endmodule
-
