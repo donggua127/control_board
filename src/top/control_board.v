@@ -73,7 +73,15 @@ input                               ad7606_frstdata,
 input                               gps_pps,
 input                               gps_rxd,
 output  wire                        gps_txd,
-output  wire                        speak_con
+output  wire                        speak_con,
+input                               dsp_fpga_ncs,
+input                               dsp_fpga_sclk,
+input                               dsp_fpga_sdi,
+output  wire                        dsp_fpga_sdo,
+output  wire                        spi_flash_ncs,
+output  wire                        spi_flash_sclk,
+output  wire                        spi_flash_sdi,
+input                               spi_flash_sdo
 );
 // Parameter Define
 localparam                          UART_NUMS = UART_232_NUMS + UART_485_NUMS + 1;
@@ -495,4 +503,10 @@ brake_heart #(
     .brake_din                  (brake_din                  ),
     .brake_dout                 (brake_dout                 )
 );
+
+assign dsp_fpga_sdo = spi_flash_sdo;
+assign spi_flash_ncs = dsp_fpga_ncs;
+assign spi_flash_sdi = dsp_fpga_sdi;
+assign spi_flash_sclk = dsp_fpga_sclk;
+
 endmodule

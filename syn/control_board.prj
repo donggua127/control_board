@@ -68,7 +68,7 @@ set_option -use_fsm_explorer 0
 set_option -top_module "control_board"
 
 # mapper_options
-set_option -frequency 25
+set_option -frequency 25.0000
 set_option -write_verilog 1
 set_option -write_vhdl 0
 set_option -srs_instrumentation 1

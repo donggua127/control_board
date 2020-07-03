@@ -150,3 +150,12 @@ NET "ad7606_ref_select" LOC = "V5"      | IOSTANDARD = LVCMOS33;
 NET "ad7606_reset"      LOC = "AB9"     | IOSTANDARD = LVCMOS33;
 NET "ad7606_frstdata"   LOC = "AB7"     | IOSTANDARD = LVCMOS33;
 NET "speak_con"         LOC = "R19"     | IOSTANDARD = LVCMOS33;
+
+NET "dsp_fpga_sclk"     LOC = "G11"     | IOSTANDARD = LVCMOS33;
+NET "dsp_fpga_ncs"      LOC = "F13"     | IOSTANDARD = LVCMOS33;
+NET "dsp_fpga_sdi"      LOC = "F14"     | IOSTANDARD = LVCMOS33;
+NET "dsp_fpga_sdo"      LOC = "H12"     | IOSTANDARD = LVCMOS33;
+NET "spi_flash_sclk"    LOC = "Y21"     | IOSTANDARD = LVCMOS33;
+NET "spi_flash_ncs"     LOC = "T5"      | IOSTANDARD = LVCMOS33;
+NET "spi_flash_sdi"     LOC = "AB20"    | IOSTANDARD = LVCMOS33;
+NET "spi_flash_sdo"     LOC = "AA20"    | IOSTANDARD = LVCMOS33;
