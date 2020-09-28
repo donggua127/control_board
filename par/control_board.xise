@@ -24,9 +24,6 @@
     <file xil_pn:name="../ucf/control_board_timing.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="3"/>
     </file>
-    <file xil_pn:name="can_test.cdc" xil_pn:type="FILE_CDC">
-      <association xil_pn:name="Implementation" xil_pn:seqID="49"/>
-    </file>
   </files>
 
   <properties>

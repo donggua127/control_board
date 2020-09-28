@@ -21,239 +21,61 @@
 `timescale 1 ns / 1 ns
 
 `define REG_000 {LOGIC_VER_YEAR}
-`define REG_001 {LOGIC_VER_MONTH}
-`define REG_002 {LOGIC_VER_DAY}
-`define REG_003 {LOGIC_VER}
-`define REG_004 {DEBUG_VER}
+`define REG_001 {LOGIC_VER_MONTH_DAY}
+`define REG_002 {LOGIC_VER}
+`define REG_003 {DEBUG_VER}
 `define REG_005 {test_reg}
-`define REG_006 {fill[7:1],ad_reset}
-`define REG_007 {fill[7:1],ad_ref_sel}
+`define REG_006 {fill[15:1],speak_con}
 
+`define REG_010 {fill[15:1],lan8710_nrst}
+`define REG_011 {brake_heart}
+`define REG_012 {fill[15:8],brake_heart_timeout}
+`define REG_013 {fill[15:1],brake_heart_enable}
+`define REG_014 {brake_ratio}
 
-`define REG_008 {fill[7-UART_485_NUMS:0],uart_485_de}
-`define REG_009 {fill[7:4],f_relay_con}
-`define REG_00D {fill[7:1],f_relay_oen}
-
-`define REG_010 {2'd0,ttl_di_1dly}
-`define REG_011 {fill[7:6],f_ttl_do}
-`define REG_012 {fill[7:1],f_ttl_en}
-`define REG_013 {lvttl_i_1dly}
-`define REG_014 {fill[7:1],lvttl_en}
-
-`define REG_018 {fill[7:1],lan8710_nrst}
-`define REG_019 {brake_heart}
-`define REG_01A {brake_heart_timeout}
-`define REG_01B {fill[7:1],brake_heart_enable}
-`define REG_01C {brake_ratio[7:0]}
-`define REG_01D {brake_ratio[15:8]}
-
-
-`define REG_020 {2'b00,uart_232_int}
-`define REG_021 {can_int}
-`define REG_022 {fill[7:6],uart_232_soft_rst}
-`define REG_023 {can_soft_rst}
-`define REG_024 {fill[7:1],uart_232_int_enb}
-`define REG_025 {fill[7:6],uart_232_int_mask}
-`define REG_026 {fill[7:1],can_int_enb}
-`define REG_027 {can_int_mask}
-
-`define REG_030 {ftw[7:0]}
-`define REG_031 {ftw[15:8]}
-`define REG_032 {ftw[23:16]}
-`define REG_033 {ftw[31:24]}
-`define REG_034 {duty[7:0]}
-`define REG_035 {duty[15:8]}
-`define REG_036 {duty[23:16]}
-`define REG_037 {duty[31:24]}
-`define REG_038 {fill[7:1],load}
-`define REG_039 {fill[7:1],pwm_en}
-
-`define REG_040 {4'd0,uart_485_int}
-`define REG_041 {fill[7:4],uart_485_soft_rst}
-`define REG_042 {fill[7:1],uart_485_int_enb}
-`define REG_043 {fill[7:4],uart_485_int_mask}
-`define REG_044 {7'd0,uart_gps_int}
-`define REG_045 {fill[7:1],uart_gps_soft_rst}
-`define REG_046 {fill[7:1],uart_gps_int_enb}
-`define REG_047 {fill[7:1],uart_gps_int_mask}
-
-`define REG_050 {ad_chn0_dat[7:0]}
-`define REG_051 {ad_chn0_dat_high}
-`define REG_052 {ad_chn1_dat[7:0]}
-`define REG_053 {ad_chn1_dat_high}
-`define REG_054 {ad_chn2_dat[7:0]}
-`define REG_055 {ad_chn2_dat_high}
-`define REG_056 {ad_chn3_dat[7:0]}
-`define REG_057 {ad_chn3_dat_high}
-`define REG_058 {ad_chn4_dat[7:0]}
-`define REG_059 {ad_chn4_dat_high}
-`define REG_05A {ad_chn5_dat[7:0]}
-`define REG_05B {ad_chn5_dat_high}
-`define REG_05C {ad_chn6_dat[7:0]}
-`define REG_05D {ad_chn6_dat_high}
-`define REG_05E {ad_chn7_dat[7:0]}
-`define REG_05F {ad_chn7_dat_high}
-
-`define REG_060 {signal_type}
-`define REG_061 {signal_fms[0*8+:8]}
-`define REG_062 {signal_fms[1*8+:8]}
-`define REG_063 {signal_fms[2*8+:8]}
-`define REG_064 {signal_fms[3*8+:8]}
-`define REG_065 {signal_int_status}
-`define REG_066 {fill[7:1],signal_int_enb}
-`define REG_067 {7'd0,signal_trigger}
-
-`define REG_068 {pco[7:0]}
-`define REG_069 {pco_high_latch}
-`define REG_06A {dco[7:0]}
-`define REG_06B {dco_high_latch}
-`define REG_06C {sco[7:0]}
-`define REG_06D {sco_high_latch}
-
-`define REG_070 {swidth[0*16+:8]}
-`define REG_071 {s0_high_latch}
-`define REG_072 {swidth[1*16+:8]}
-`define REG_073 {s1_high_latch}
-`define REG_074 {swidth[2*16+:8]}
-`define REG_075 {s2_high_latch}
-`define REG_076 {swidth[3*16+:8]}
-`define REG_077 {s3_high_latch}
-
-`define REG_078 {code1_pco[7:0]}
-`define REG_079 {code1_pco_high_latch}
-`define REG_07A {code1_dco[7:0]}
-`define REG_07B {code1_dco_high_latch}
-`define REG_07C {code1_sco[7:0]}
-`define REG_07D {code1_sco_high_latch}
-
+`define REG_020 {12'd0,can_int}
+`define REG_021 {fill[15:8],can_soft_rst}
+`define REG_022 {fill[15:1],can_int_enb}
+`define REG_023 {fill[15:4],can_int_mask}
 
 module sys_registers#(
-parameter                           UART_NUMS = 11,
-parameter                           UART_232_NUMS = 6,
-parameter                           UART_485_NUMS = 4,
-parameter                           CAN_NUMS = 8,
-parameter                           LOGIC_VER_YEAR = 8'h19,
-parameter                           LOGIC_VER_MONTH = 8'h05,
-parameter                           LOGIC_VER_DAY = 8'h28,
-parameter                           LOGIC_VER = 8'h20,
-parameter                           DEBUG_VER = 8'h20,
+parameter                           CAN_NUMS = 4,
+parameter                           LOGIC_VER_YEAR = 16'h2020,
+parameter                           LOGIC_VER_MONTH_DAY = 16'h0910,
+parameter                           LOGIC_VER = 16'h0300,
+parameter                           DEBUG_VER = 16'h0300,
 parameter                           U_DLY = 1
 )
 (
 input                               clk,
 input                               rst_n,
 input           [7:0]               lbs_addr,
-input           [7:0]               lbs_din,
-output  reg     [7:0]               lbs_dout,
+input           [15:0]              lbs_din,
+output  reg     [15:0]              lbs_dout,
 input                               lbs_we,
 input                               lbs_re,
 input                               lbs_cs_n,
-output  reg     [UART_485_NUMS-1:0] uart_485_de,
-output  reg     [3:0]               f_relay_con,
-output  reg                         f_relay_oen,
-input           [5:0]               f_ttl_di,
-output  reg     [5:0]               f_ttl_do,
-output  reg                         f_ttl_en,
-input           [7:0]               lvttl_i,
-output  reg                         lvttl_en,
 output  reg                         lan8710_nrst,
-input           [UART_NUMS-1:0]     uart_int,
+output  reg                         speak_con,
 input           [CAN_NUMS-1:0]      can_int,
 output  wire    [7:0]               int_o,
-output  reg                         ad_reset,
-output  reg                         ad_ref_sel,
 output  reg     [7:0]               can_soft_rst,
-output  wire    [UART_NUMS-1:0]     uart_soft_rst,
-input                               gps_pps,
-output  reg     [31:0]              ftw,
-output  reg     [31:0]              duty,
-output  reg                         load,
-output  reg                         pwm_en,
-input           [15:0]              ad_chn0_dat,
-input           [15:0]              ad_chn1_dat,
-input           [15:0]              ad_chn2_dat,
-input           [15:0]              ad_chn3_dat,
-input           [15:0]              ad_chn4_dat,
-input           [15:0]              ad_chn5_dat,
-input           [15:0]              ad_chn6_dat,
-input           [15:0]              ad_chn7_dat,
-output  reg     [7:0]               signal_type,
-output  reg     [31:0]              signal_fms,
-input           [3:0]               signal_into,
-input           [15:0]              pco,
-input           [63:0]              swidth,
-input           [15:0]              sco,
-input           [15:0]              code1_pco,
-input           [15:0]              code1_sco,
 output  reg                         brake_heart_pulse,
 output  reg     [15:0]              brake_ratio,
 output  reg     [7:0]               brake_heart_timeout,
 output  reg                         brake_heart_enable
 );
 // Parameter Define
-localparam                          DEF_RS485 = 8'b0000_0000;
 
 // Register Define
-reg     [7:0]                       fill;
-reg     [7:0]                       test_reg;
-reg     [5:0]                       ttl_di_0dly;
-reg     [5:0]                       ttl_di_1dly;
+reg     [15:0]                      fill;
+reg     [15:0]                      test_reg;
 reg                                 can_int_enb;
-reg     [7:0]                       can_int_mask;
-reg     [UART_232_NUMS-1:0]         uart_232_soft_rst;
-reg                                 uart_232_int_enb;
-reg     [UART_232_NUMS-1:0]         uart_232_int_mask;
-reg     [UART_485_NUMS-1:0]         uart_485_soft_rst;
-reg                                 uart_485_int_enb;
-reg     [UART_485_NUMS-1:0]         uart_485_int_mask;
-reg                                 uart_gps_soft_rst;
-reg                                 uart_gps_int_enb;
-reg                                 uart_gps_int_mask;
-reg     [7:0]                       ad_chn0_dat_high;
-reg     [7:0]                       ad_chn1_dat_high;
-reg     [7:0]                       ad_chn2_dat_high;
-reg     [7:0]                       ad_chn3_dat_high;
-reg     [7:0]                       ad_chn4_dat_high;
-reg     [7:0]                       ad_chn5_dat_high;
-reg     [7:0]                       ad_chn6_dat_high;
-reg     [7:0]                       ad_chn7_dat_high;
-reg     [7:0]                       lvttl_i_0dly;
-reg     [7:0]                       lvttl_i_1dly;
-reg     [3:0]                       signal_int_status;
-reg     [18:0]                      signal_int_cnt;
-reg                                 signal_int_i;
-reg                                 signal_trigger;
-reg     [8:0]                       signal_tcnt;
-reg                                 signal_int_enb;
-reg                                 signal_int;
-reg     [7:0]                       pco_high_latch;
-reg     [15:0]                      dco;
-reg     [7:0]                       dco_high_latch;
-reg     [7:0]                       sco_high_latch;
-reg     [15:0]                      pco_pre;
-reg     [7:0]                       s0_high_latch;
-reg     [7:0]                       s1_high_latch;
-reg     [7:0]                       s2_high_latch;
-reg     [7:0]                       s3_high_latch;
-reg     [7:0]                       code1_pco_high_latch;
-reg     [7:0]                       code1_dco_high_latch;
-reg     [7:0]                       code1_sco_high_latch;
-reg     [15:0]                      code1_dco;
-reg     [15:0]                      code1_pco_pre;
+reg     [CAN_NUMS-1:0]              can_int_mask;
 reg     [7:0]                       brake_heart;
 
 
 // Wire Define
-wire    [UART_232_NUMS-1:0]         uart_232_int;
-wire    [UART_485_NUMS-1:0]         uart_485_int;
-wire                                uart_gps_int;
-
-
-assign uart_232_int = uart_int[0+:UART_232_NUMS];
-assign uart_485_int = uart_int[UART_232_NUMS+:UART_485_NUMS];
-assign uart_gps_int = uart_int[UART_NUMS-1];
-
-assign uart_soft_rst = {uart_gps_soft_rst,uart_485_soft_rst,uart_232_soft_rst};
 
 always @ (posedge clk or negedge rst_n )
 begin
@@ -261,50 +83,15 @@ begin
         begin
             `REG_005 <= 8'h00;
             `REG_006 <= 8'h00;
-            `REG_007 <= 8'h00;
-            `REG_008 <= 8'h00;
-            `REG_009 <= 8'h00;
-            `REG_00D <= 8'h03;
-            `REG_011 <= 8'h00;
-            `REG_012 <= 8'h00;
+            `REG_010 <= 8'h00;
+            `REG_011 <= 8'h02;      //brake heart timeout (default: 2s)
+            `REG_012 <= 8'h00;      //brake heart enable  (default: DISABLE)
+            `REG_013 <= 8'h00;
             `REG_014 <= 8'h00;
-            `REG_018 <= 8'h00;
-            `REG_019 <= 8'h00;
-            `REG_01A <= 8'h02;      //brake heart timeout (default: 2s)
-            `REG_01B <= 8'h00;      //brake heart enable  (default: DISABLE)
-            `REG_01C <= 8'h00;      //brake heart enable  (default: DISABLE)
-            `REG_01D <= 8'h00;      //brake heart enable  (default: DISABLE)
+
+            `REG_021 <= 8'h00;
             `REG_022 <= 8'h00;
             `REG_023 <= 8'h00;
-            `REG_024 <= 8'h00;
-            `REG_025 <= 8'h00;
-            `REG_026 <= 8'h00;
-            `REG_027 <= 8'h00;
-
-            `REG_030 <= 8'h00;
-            `REG_031 <= 8'h00;
-            `REG_032 <= 8'h00;
-            `REG_033 <= 8'h00;
-            `REG_034 <= 8'h00;
-            `REG_035 <= 8'h00;
-            `REG_036 <= 8'h00;
-            `REG_037 <= 8'h00;
-            `REG_038 <= 8'h00;
-            `REG_039 <= 8'h00;
-
-            `REG_041 <= 8'h00;
-            `REG_042 <= 8'h00;
-            `REG_043 <= 8'h00;
-            `REG_045 <= 8'h00;
-            `REG_046 <= 8'h00;
-            `REG_047 <= 8'h00;
-
-            `REG_060 <= 8'b01010101;
-            `REG_061 <= 8'd2;
-            `REG_062 <= 8'd2;
-            `REG_063 <= 8'd2;
-            `REG_064 <= 8'd2;
-            `REG_066 <= 8'd0;
         end
     else
         begin
@@ -313,47 +100,15 @@ begin
                     case(lbs_addr)
                         8'h05:`REG_005 <= #U_DLY lbs_din;
                         8'h06:`REG_006 <= #U_DLY lbs_din;
-                        8'h07:`REG_007 <= #U_DLY lbs_din;
-                        8'h08:`REG_008 <= #U_DLY lbs_din;
-                        8'h09:`REG_009 <= #U_DLY lbs_din;
-                        8'h0D:`REG_00D <= #U_DLY lbs_din;
+                        8'h10:`REG_010 <= #U_DLY lbs_din;
                         8'h11:`REG_011 <= #U_DLY lbs_din;
                         8'h12:`REG_012 <= #U_DLY lbs_din;
+                        8'h13:`REG_013 <= #U_DLY lbs_din;
                         8'h14:`REG_014 <= #U_DLY lbs_din;
-                        8'h18:`REG_018 <= #U_DLY lbs_din;
-                        8'h19:`REG_019 <= #U_DLY lbs_din;
-                        8'h1A:`REG_01A <= #U_DLY lbs_din;
-                        8'h1B:`REG_01B <= #U_DLY lbs_din;
-                        8'h1C:`REG_01C <= #U_DLY lbs_din;
-                        8'h1D:`REG_01D <= #U_DLY lbs_din;
+
+                        8'h21:`REG_021 <= #U_DLY lbs_din;
                         8'h22:`REG_022 <= #U_DLY lbs_din;
                         8'h23:`REG_023 <= #U_DLY lbs_din;
-                        8'h24:`REG_024 <= #U_DLY lbs_din;
-                        8'h25:`REG_025 <= #U_DLY lbs_din;
-                        8'h26:`REG_026 <= #U_DLY lbs_din;
-                        8'h27:`REG_027 <= #U_DLY lbs_din;
-                        8'h30:`REG_030 <= #U_DLY lbs_din;
-                        8'h31:`REG_031 <= #U_DLY lbs_din;
-                        8'h32:`REG_032 <= #U_DLY lbs_din;
-                        8'h33:`REG_033 <= #U_DLY lbs_din;
-                        8'h34:`REG_034 <= #U_DLY lbs_din;
-                        8'h35:`REG_035 <= #U_DLY lbs_din;
-                        8'h36:`REG_036 <= #U_DLY lbs_din;
-                        8'h37:`REG_037 <= #U_DLY lbs_din;
-                        8'h38:`REG_038 <= #U_DLY lbs_din;
-                        8'h39:`REG_039 <= #U_DLY lbs_din;
-                        8'h41:`REG_041 <= #U_DLY lbs_din;
-                        8'h42:`REG_042 <= #U_DLY lbs_din;
-                        8'h43:`REG_043 <= #U_DLY lbs_din;
-                        8'h45:`REG_045 <= #U_DLY lbs_din;
-                        8'h46:`REG_046 <= #U_DLY lbs_din;
-                        8'h47:`REG_047 <= #U_DLY lbs_din;
-                        8'h60:`REG_060 <= #U_DLY lbs_din;
-                        8'h61:`REG_061 <= #U_DLY lbs_din;
-                        8'h62:`REG_062 <= #U_DLY lbs_din;
-                        8'h63:`REG_063 <= #U_DLY lbs_din;
-                        8'h64:`REG_064 <= #U_DLY lbs_din;
-                        8'h66:`REG_066 <= #U_DLY lbs_din;
                         default:;
                     endcase
                 end
@@ -371,292 +126,30 @@ begin
                 8'h01:lbs_dout <= #U_DLY `REG_001;
                 8'h02:lbs_dout <= #U_DLY `REG_002;
                 8'h03:lbs_dout <= #U_DLY `REG_003;
-                8'h04:lbs_dout <= #U_DLY `REG_004;
-                8'h05:lbs_dout <= #U_DLY `REG_005;
+                8'h05:lbs_dout <= #U_DLY ~{`REG_005};
                 8'h06:lbs_dout <= #U_DLY `REG_006;
-                8'h07:lbs_dout <= #U_DLY `REG_007;
-                8'h08:lbs_dout <= #U_DLY `REG_008;
-                8'h09:lbs_dout <= #U_DLY `REG_009;
-                8'h0D:lbs_dout <= #U_DLY `REG_00D;
                 8'h10:lbs_dout <= #U_DLY `REG_010;
                 8'h11:lbs_dout <= #U_DLY `REG_011;
                 8'h12:lbs_dout <= #U_DLY `REG_012;
                 8'h13:lbs_dout <= #U_DLY `REG_013;
                 8'h14:lbs_dout <= #U_DLY `REG_014;
-                8'h18:lbs_dout <= #U_DLY `REG_018;
-                8'h19:lbs_dout <= #U_DLY `REG_019;
-                8'h1A:lbs_dout <= #U_DLY `REG_01A;
-                8'h1B:lbs_dout <= #U_DLY `REG_01B;
-                8'h1C:lbs_dout <= #U_DLY `REG_01C;
-                8'h1D:lbs_dout <= #U_DLY `REG_01D;
                 8'h20:lbs_dout <= #U_DLY `REG_020;
                 8'h21:lbs_dout <= #U_DLY `REG_021;
                 8'h22:lbs_dout <= #U_DLY `REG_022;
                 8'h23:lbs_dout <= #U_DLY `REG_023;
-                8'h24:lbs_dout <= #U_DLY `REG_024;
-                8'h25:lbs_dout <= #U_DLY `REG_025;
-                8'h26:lbs_dout <= #U_DLY `REG_026;
-                8'h27:lbs_dout <= #U_DLY `REG_027;
-                8'h30:lbs_dout <= #U_DLY `REG_030;
-                8'h31:lbs_dout <= #U_DLY `REG_031;
-                8'h32:lbs_dout <= #U_DLY `REG_032;
-                8'h33:lbs_dout <= #U_DLY `REG_033;
-                8'h34:lbs_dout <= #U_DLY `REG_034;
-                8'h35:lbs_dout <= #U_DLY `REG_035;
-                8'h36:lbs_dout <= #U_DLY `REG_036;
-                8'h37:lbs_dout <= #U_DLY `REG_037;
-                8'h38:lbs_dout <= #U_DLY `REG_038;
-                8'h39:lbs_dout <= #U_DLY `REG_039;
-                8'h40:lbs_dout <= #U_DLY `REG_040;
-                8'h41:lbs_dout <= #U_DLY `REG_041;
-                8'h42:lbs_dout <= #U_DLY `REG_042;
-                8'h43:lbs_dout <= #U_DLY `REG_043;
-                8'h44:lbs_dout <= #U_DLY `REG_044;
-                8'h45:lbs_dout <= #U_DLY `REG_045;
-                8'h46:lbs_dout <= #U_DLY `REG_046;
-                8'h47:lbs_dout <= #U_DLY `REG_047;
-                8'h50:lbs_dout <= #U_DLY `REG_050;
-                8'h51:lbs_dout <= #U_DLY `REG_051;
-                8'h52:lbs_dout <= #U_DLY `REG_052;
-                8'h53:lbs_dout <= #U_DLY `REG_053;
-                8'h54:lbs_dout <= #U_DLY `REG_054;
-                8'h55:lbs_dout <= #U_DLY `REG_055;
-                8'h56:lbs_dout <= #U_DLY `REG_056;
-                8'h57:lbs_dout <= #U_DLY `REG_057;
-                8'h58:lbs_dout <= #U_DLY `REG_058;
-                8'h59:lbs_dout <= #U_DLY `REG_059;
-                8'h5A:lbs_dout <= #U_DLY `REG_05A;
-                8'h5B:lbs_dout <= #U_DLY `REG_05B;
-                8'h5C:lbs_dout <= #U_DLY `REG_05C;
-                8'h5D:lbs_dout <= #U_DLY `REG_05D;
-                8'h5E:lbs_dout <= #U_DLY `REG_05E;
-                8'h5F:lbs_dout <= #U_DLY `REG_05F;
-                8'h60:lbs_dout <= #U_DLY `REG_060;
-                8'h61:lbs_dout <= #U_DLY `REG_061;
-                8'h62:lbs_dout <= #U_DLY `REG_062;
-                8'h63:lbs_dout <= #U_DLY `REG_063;
-                8'h64:lbs_dout <= #U_DLY `REG_064;
-                8'h65:lbs_dout <= #U_DLY `REG_065;
-                8'h66:lbs_dout <= #U_DLY `REG_066;
-                8'h67:lbs_dout <= #U_DLY `REG_067;
-                8'h68:lbs_dout <= #U_DLY `REG_068;
-                8'h69:lbs_dout <= #U_DLY `REG_069;
-                8'h6A:lbs_dout <= #U_DLY `REG_06A;
-                8'h6B:lbs_dout <= #U_DLY `REG_06B;
-                8'h6C:lbs_dout <= #U_DLY `REG_06C;
-                8'h6D:lbs_dout <= #U_DLY `REG_06D;
-                8'h70:lbs_dout <= #U_DLY `REG_070;
-                8'h71:lbs_dout <= #U_DLY `REG_071;
-                8'h72:lbs_dout <= #U_DLY `REG_072;
-                8'h73:lbs_dout <= #U_DLY `REG_073;
-                8'h74:lbs_dout <= #U_DLY `REG_074;
-                8'h75:lbs_dout <= #U_DLY `REG_075;
-                8'h76:lbs_dout <= #U_DLY `REG_076;
-                8'h77:lbs_dout <= #U_DLY `REG_077;
-                8'h78:lbs_dout <= #U_DLY `REG_078;
-                8'h79:lbs_dout <= #U_DLY `REG_079;
-                8'h7A:lbs_dout <= #U_DLY `REG_07A;
-                8'h7B:lbs_dout <= #U_DLY `REG_07B;
-                8'h7C:lbs_dout <= #U_DLY `REG_07C;
-                8'h7D:lbs_dout <= #U_DLY `REG_07D;
                 default:lbs_dout <= #U_DLY 8'h00;
             endcase
         end
 end
 
-assign int_o[0] = uart_232_int_enb & (|(uart_232_int & uart_232_int_mask));  //High Level
+assign int_o[0] = 1'b0;
 assign int_o[1] = can_int_enb & (|((~can_int) & can_int_mask));  //High Level
-assign int_o[2] = uart_485_int_enb & (|(uart_485_int & uart_485_int_mask));  //High Level
-assign int_o[3] = uart_gps_int_enb & (|(uart_gps_int & uart_gps_int_mask));  //High Level
-assign int_o[4] = gps_pps;
-assign int_o[5] = signal_int;
+assign int_o[2] = 1'b0;
+assign int_o[3] = 1'b0;
+assign int_o[4] = 1'b0;
+assign int_o[5] = 1'b0;
 assign int_o[7:6] = 3'b000;
 
-integer i;
-always @ (posedge clk or negedge rst_n )
-begin
-    if (rst_n == 1'b0)
-        signal_int_status <= 4'b0000;
-    else
-        begin
-            for(i=0;i<4;i=i+1)
-                begin
-                    if(signal_into[i] == 1'b1)
-                        signal_int_status[i] <= #U_DLY 1'b1;
-                    else if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
-                        signal_int_status[i] <= #U_DLY 1'b0;
-                    else;
-                end
-        end
-end
-
-always @ (posedge clk or negedge rst_n )
-begin
-    if (rst_n == 1'b0)
-        begin
-            signal_int_cnt <= 19'd0;
-            signal_int_i <= 1'b0;
-        end
-    else
-        begin
-           if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
-               signal_int_cnt <= #U_DLY 16'd0;
-           else if(signal_int_cnt < 19'd400000)  //5ms
-               signal_int_cnt <= #U_DLY signal_int_cnt + 19'd1;
-           else;
-
-           if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h65)
-               signal_int_i <= #U_DLY 1'b0;
-           else if(signal_int_cnt >= 19'd400000 && signal_int_status != 4'b0000)
-               signal_int_i <= #U_DLY 1'b1;
-           else;
-
-           signal_int <= #U_DLY signal_int_i & signal_int_enb;
-        end
-end
-
-always @ (posedge clk or negedge rst_n )
-begin
-    if (rst_n == 1'b0)
-        begin
-            signal_trigger <= 1'b0;
-            signal_tcnt <= 9'd0;
-        end
-    else
-        begin
-            if(signal_int_i == 1'b0)
-                signal_tcnt <= #U_DLY 9'd0;
-            else if(signal_tcnt < 9'd500)
-                signal_tcnt <= #U_DLY signal_tcnt + 9'd1;
-            else;
-
-            if(signal_tcnt >= 9'd500)
-                signal_trigger <= #U_DLY 1'b1;
-            else
-                signal_trigger <= #U_DLY 1'b0;
-        end
-end
-
-always @ (posedge clk)
-begin
-    lvttl_i_0dly <= #U_DLY lvttl_i;
-    lvttl_i_1dly <= #U_DLY lvttl_i_0dly;
-    ttl_di_0dly <= #U_DLY f_ttl_di;
-    ttl_di_1dly <= #U_DLY ttl_di_0dly;
-end
-
-always @ (posedge clk or negedge rst_n )
-begin
-    if (rst_n == 1'b0)
-        begin
-            ad_chn0_dat_high <= 8'd0;
-            ad_chn1_dat_high <= 8'd0;
-            ad_chn2_dat_high <= 8'd0;
-            ad_chn3_dat_high <= 8'd0;
-            ad_chn4_dat_high <= 8'd0;
-            ad_chn5_dat_high <= 8'd0;
-            ad_chn6_dat_high <= 8'd0;
-            ad_chn7_dat_high <= 8'd0;
-            pco_high_latch <= 8'd0;
-            dco_high_latch <= 8'd0;
-            sco_high_latch <= 8'd0;
-            dco <= 16'd0;
-            pco_pre <= 16'd0;
-
-            code1_pco_high_latch <= 8'd0;
-            code1_dco_high_latch <= 8'd0;
-            code1_sco_high_latch <= 8'd0;
-            code1_dco <= 16'd0;
-            code1_pco_pre <= 16'd0;
-        end
-    else
-        begin
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h50)
-                ad_chn0_dat_high <= #U_DLY ad_chn0_dat[15:8];
-            else;
-
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h52)
-                ad_chn1_dat_high <= #U_DLY ad_chn1_dat[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h54)
-                ad_chn2_dat_high <= #U_DLY ad_chn2_dat[15:8];
-            else;
-
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h56)
-                ad_chn3_dat_high <= #U_DLY ad_chn3_dat[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h58)
-                ad_chn4_dat_high <= #U_DLY ad_chn4_dat[15:8];
-            else;
-
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h5A)
-                ad_chn5_dat_high <= #U_DLY ad_chn5_dat[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h5C)
-                ad_chn6_dat_high <= #U_DLY ad_chn6_dat[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h52)
-                ad_chn7_dat_high <= #U_DLY ad_chn7_dat[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h68)
-                pco_high_latch <= #U_DLY pco[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6A)
-                pco_pre <= #U_DLY pco;
-            else;
-
-            dco <= #U_DLY pco - pco_pre;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6A)
-                dco_high_latch <= #U_DLY dco[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h6C)
-                sco_high_latch <= #U_DLY sco[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h70)
-                s0_high_latch <= #U_DLY swidth[(0*16+8)+:8];
-            else;
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h72)
-                s1_high_latch <= #U_DLY swidth[(1*16+8)+:8];
-            else;
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h74)
-                s2_high_latch <= #U_DLY swidth[(2*16+8)+:8];
-            else;
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h76)
-                s3_high_latch <= #U_DLY swidth[(3*16+8)+:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h78)
-                code1_pco_high_latch <= #U_DLY code1_pco[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7A)
-                code1_pco_pre <= #U_DLY code1_pco;
-            else;
-
-            code1_dco <= #U_DLY code1_pco - code1_pco_pre;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7A)
-                code1_dco_high_latch <= #U_DLY code1_dco[15:8];
-            else;
-
-            if(lbs_cs_n == 1'b0 && lbs_re == 1'b1 && lbs_addr == 8'h7C)
-                code1_sco_high_latch <= #U_DLY code1_sco[15:8];
-            else;
-
-        end
-end
 
 always @(posedge clk or negedge rst_n)
 begin
