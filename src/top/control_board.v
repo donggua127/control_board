@@ -45,11 +45,18 @@ output  wire                        speak_con,
 input                               dsp_fpga_ncs,
 input                               dsp_fpga_sclk,
 input                               dsp_fpga_sdi,
-output  wire                        dsp_fpga_sdo,
+inout                               dsp_fpga_sdo,
 output  wire                        spi_flash_ncs,
 output  wire                        spi_flash_sclk,
 output  wire                        spi_flash_sdi,
-input                               spi_flash_sdo
+input                               spi_flash_sdo,
+output  wire                        sja1000_rstn,
+output  wire                        sja1000_csn,
+output  wire                        sja1000_ale,
+output  wire                        sja1000_wrn,
+output  wire                        sja1000_rdn,
+inout           [7:0]               sja1000_ad,
+input                               sja1000_intn
 );
 // Parameter Define
 
@@ -218,7 +225,14 @@ u_sys_registers(
     .brake_heart_pulse          (brake_heart_pulse          ),
     .brake_ratio                (brake_ratio                ),
     .brake_heart_timeout        (brake_heart_timeout        ),
-    .brake_heart_enable         (brake_heart_enable         )
+    .brake_heart_enable         (brake_heart_enable         ),
+    .sja1000_rstn               (sja1000_rstn               ),
+    .sja1000_csn                (sja1000_csn                ),
+    .sja1000_ale                (sja1000_ale                ),
+    .sja1000_wrn                (sja1000_wrn                ),
+    .sja1000_rdn                (sja1000_rdn                ),
+    .sja1000_ad                 (sja1000_ad                 ),
+    .sja1000_intn               (sja1000_intn               )
 );
 
 
@@ -257,7 +271,7 @@ brake_heart #(
     .brake_dout                 (brake_dout                 )
 );
 
-assign dsp_fpga_sdo = spi_flash_sdo;
+assign dsp_fpga_sdo = dsp_fpga_ncs ? 1'bz : spi_flash_sdo;
 assign spi_flash_ncs = dsp_fpga_ncs;
 assign spi_flash_sdi = dsp_fpga_sdi;
 assign spi_flash_sclk = dsp_fpga_sclk;

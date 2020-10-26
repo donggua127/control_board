@@ -66,3 +66,19 @@ NET "spi_flash_sclk"    LOC = "Y21"     | IOSTANDARD = LVCMOS33;
 NET "spi_flash_ncs"     LOC = "T5"      | IOSTANDARD = LVCMOS33;
 NET "spi_flash_sdi"     LOC = "AB20"    | IOSTANDARD = LVCMOS33;
 NET "spi_flash_sdo"     LOC = "AA20"    | IOSTANDARD = LVCMOS33;
+
+NET "sja1000_ad[7]"     LOC = "Y2"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[6]"     LOC = "Y1"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[5]"     LOC = "W3"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[4]"     LOC = "W1"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[3]"     LOC = "P8"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[2]"     LOC = "P7"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[1]"     LOC = "P6"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ad[0]"     LOC = "P5"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_ale"       LOC = "T4"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_csn"       LOC = "T3"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_intn"      LOC = "N7"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_rdn"       LOC = "U4"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_rstn"      LOC = "N6"       | IOSTANDARD = LVCMOS33;
+NET "sja1000_wrn"       LOC = "V3"       | IOSTANDARD = LVCMOS33;
+

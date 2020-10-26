@@ -1584,3 +1584,11 @@ tmp/pin_check_v20/ucf/XC6SLX100-2FGG484I.ucf
 tmp/pin_check_v20/ucf/XC6SLX100-2FGG484I.v
 ucf/XC6SLX100-2FGG484I.ucf
 doc/3.0sch/XC6SLX100-2FGG484I - 副本.ucf
+out/control_board.bin
+out/control_board_v3_0929.cfi
+out/control_board_v3_0929.mcs
+out/control_board_v3_0929.prm
+out/control_test.cfi
+out/control_test.prm
+par/pa.fromNetlist.tcl
+par/planAhead_pid3348.debug
