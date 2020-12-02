@@ -106,8 +106,8 @@ begin
             `REG_005 <= 8'h00;
             `REG_006 <= 8'h00;
             `REG_010 <= 8'h00;
-            `REG_011 <= 8'h02;      //brake heart timeout (default: 2s)
-            `REG_012 <= 8'h00;      //brake heart enable  (default: DISABLE)
+            `REG_011 <= 8'h00;
+            `REG_012 <= 8'h04;
             `REG_013 <= 8'h00;
             `REG_014 <= 8'h00;
 
@@ -197,7 +197,7 @@ begin
         brake_heart_pulse <= 1'b0;
     else
         begin
-            if(lbs_cs_n == 1'b0 && lbs_we == 1'b1 && lbs_addr == 8'h19)
+            if(lbs_cs_n == 1'b0 && lbs_we == 1'b1 && lbs_addr == 8'h11)
                 brake_heart_pulse <= #U_DLY 1'b1;
             else
                 brake_heart_pulse <= #U_DLY 1'b0;
